@@ -7,15 +7,26 @@ output: github_document
 
 # Load, Clean and Join Data 
 
-```{r}
+```{r , message=FALSE, warning=FALSE}
+## for data manipulation
 library(tidyverse)
+
+## for robust standard errors
+library(sandwich)
+library(lmtest)
+
+## for printing nice tables
+library(stargazer)
+
+## for actually loading data
 library(fec16)
 ```
 
 
 ```{r}
 campaigns     <- data.frame(campaigns)
-results_house <- data.frame(results_house)
+results_house <- data.frame(results_house) %>% 
+  filter(party %in% c('DEM', 'REP')) # how many people did we drop? : 
 # individuals <- read.csv('./individuals.csv')
 
 
@@ -23,12 +34,12 @@ results_house <- data.frame(results_house)
 
 # Explore and Make Histograms 
 
-```{r make histograms}
+```{r make histograms, warning=FALSE}
 results_house %>% 
   filter(party %in% c('REP', 'DEM', 'IND')) %>% 
   ggplot() + 
   aes(x=primary_votes, fill=party) + 
-  geom_histogram(position = 'dodge')
+  geom_histogram(bins=30, position = 'dodge')
 ```
 
 
@@ -36,6 +47,22 @@ results_house %>%
 
 # Run a Regression 
 
+```{r}
+model <- lm(primary_votes ~ incumbent + party, data = results_house)
+coeftest(model, vcov. = vcovHC)
+```
+
 # Print a Table 
 
+```{r}
+stargazer(
+  model, type = 'text'
+)
+```
+
+
 # Interpret the Regression Output 
+
+- We've estimated that a challenger -- i.e. someone who is not currently an incumbent politician, will 
+garner `r format(coef(model)['(Intercept)'], digits = 1, big.mark = ',')` votes. 
+- We've estimated that an incumbent will get `r format(coef(model)['incumbentTRUE'], digits = 1, big.mark = ',')`
