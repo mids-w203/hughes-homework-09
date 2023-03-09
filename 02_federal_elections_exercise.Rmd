@@ -8,15 +8,29 @@ output: github_document
 # Load, Clean and Join Data 
 
 ```{r}
+library(tidyverse)
 library(fec16)
-install.packages('fec16')
+```
+
+
+```{r}
+campaigns     <- data.frame(campaigns)
+results_house <- data.frame(results_house)
+# individuals <- read.csv('./individuals.csv')
 
 
 ```
 
-
-
 # Explore and Make Histograms 
+
+```{r make histograms}
+results_house %>% 
+  filter(party %in% c('REP', 'DEM', 'IND')) %>% 
+  ggplot() + 
+  aes(x=primary_votes, fill=party) + 
+  geom_histogram(position = 'dodge')
+```
+
 
 # Make a Scatter Plot 
 
