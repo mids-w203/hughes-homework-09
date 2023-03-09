@@ -1,0 +1,27 @@
+---
+title: "Federal Elections Exercise"
+author: "Alex"
+date: "March 08, 2023"
+output: github_document
+---
+
+# Load, Clean and Join Data 
+
+```{r}
+library(fec16)
+install.packages('fec16')
+
+
+```
+
+
+
+# Explore and Make Histograms 
+
+# Make a Scatter Plot 
+
+# Run a Regression 
+
+# Print a Table 
+
+# Interpret the Regression Output 
